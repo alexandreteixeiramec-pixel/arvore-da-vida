@@ -1,17 +1,30 @@
 import { createElement, useEffect, useMemo, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
-import { buildMapHtml, type MapState } from "./mapHtml";
+import type { LeafletMapProps } from "./LeafletMap";
+import { buildMapHtml } from "./mapHtml";
 
-type Props = MapState & { interactive?: boolean; command?: { recenter?: boolean; flyTo?: [number, number]; n: number } };
-
-export default function LeafletMap({ year, base, reports, interactive = true, command }: Props) {
+export default function LeafletMap({ year, base, reports, interactive = true, padTop = 0, padBottom = 0, command, onPatch }: LeafletMapProps) {
   const ref = useRef<any>(null);
   const [ready, setReady] = useState(false);
+  const onPatchRef = useRef(onPatch);
+  onPatchRef.current = onPatch;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const html = useMemo(() => buildMapHtml({ year, base, reports }, interactive), []);
+  const html = useMemo(() => buildMapHtml({ year, base, reports }, interactive, padTop, padBottom), []);
 
   const send = (msg: object) => ref.current?.contentWindow?.postMessage(JSON.stringify(msg), "*");
+
+  useEffect(() => {
+    const listener = (e: MessageEvent) => {
+      if (e.source !== ref.current?.contentWindow) return;
+      try {
+        const m = JSON.parse(e.data);
+        if (m.type === "patch") onPatchRef.current?.(m.id);
+      } catch {}
+    };
+    window.addEventListener("message", listener);
+    return () => window.removeEventListener("message", listener);
+  }, []);
 
   useEffect(() => {
     if (ready) send({ year, base, reports });

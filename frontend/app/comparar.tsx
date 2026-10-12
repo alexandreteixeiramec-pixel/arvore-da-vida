@@ -4,8 +4,10 @@ import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import LeafletMap from "@/src/components/LeafletMap";
-import { STATS } from "@/src/data/vegetation";
+import { PatchSheet } from "@/src/components/PatchSheet";
+import { CURRENT_YEAR, PATCHES, STATS, type Patch } from "@/src/data/vegetation";
 import { fonts, makeStyles, useTheme } from "@/src/theme";
+import { useState } from "react";
 
 const EMPTY: never[] = [];
 
@@ -14,6 +16,8 @@ export default function CompareScreen() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const [patch, setPatch] = useState<Patch | null>(null);
+  const openPatch = (id: string) => setPatch(PATCHES.find((p) => p.id === id) ?? null);
   const before = STATS[0];
   const now = STATS[STATS.length - 1];
 
@@ -25,18 +29,18 @@ export default function CompareScreen() {
         </Pressable>
         <View style={{ flex: 1 }}>
           <Text style={styles.title}>Antes x Agora</Text>
-          <Text style={styles.sub}>Arborização da ilha: 1994 e hoje</Text>
+          <Text style={styles.sub}>Arborização da ilha: 1996 e hoje · toque nas manchas</Text>
         </View>
       </View>
 
       <View style={styles.mapBox}>
-        <LeafletMap year={1994} base="sat" reports={EMPTY} />
+        <LeafletMap year={STATS[0].year} base="sat" reports={EMPTY} padTop={40} onPatch={openPatch} />
         <View style={styles.tag}>
-          <Text style={styles.tagText} testID="compare-before-label">1994 · {before.coverage}% verde</Text>
+          <Text style={styles.tagText} testID="compare-before-label">{before.year} · {before.coverage}% verde</Text>
         </View>
       </View>
       <View style={styles.mapBox}>
-        <LeafletMap year={2024} base="sat" reports={EMPTY} />
+        <LeafletMap year={CURRENT_YEAR} base="sat" reports={EMPTY} padTop={40} onPatch={openPatch} />
         <View style={[styles.tag, styles.tagNow]}>
           <Text style={[styles.tagText, { color: colors.onError }]} testID="compare-now-label">
             Hoje · {now.coverage}% verde
@@ -51,6 +55,7 @@ export default function CompareScreen() {
         </Text>
         <Text style={styles.note}>Modelo educativo aproximado. Confira imagens reais no Google Earth Timelapse.</Text>
       </View>
+      <PatchSheet patch={patch} onClose={() => setPatch(null)} />
     </View>
   );
 }

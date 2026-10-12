@@ -9,7 +9,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { fetchReports } from "@/src/api";
 import LeafletMap from "@/src/components/LeafletMap";
-import { STATS, YEAR_STORY, YEARS, type Year } from "@/src/data/vegetation";
+import { PatchSheet } from "@/src/components/PatchSheet";
+import { CURRENT_YEAR, PATCHES, STATS, YEAR_STORY, YEARS, type Patch, type Year } from "@/src/data/vegetation";
 import { usesNativeTabs } from "@/src/navigation";
 import { fonts, makeStyles, useTheme } from "@/src/theme";
 
@@ -20,7 +21,8 @@ export default function MapScreen() {
   const router = useRouter();
   const bottomChrome = usesNativeTabs ? insets.bottom : 0;
 
-  const [year, setYear] = useState<Year>(2024);
+  const [year, setYear] = useState<Year>(CURRENT_YEAR);
+  const [patch, setPatch] = useState<Patch | null>(null);
   const [base, setBase] = useState<"sat" | "map">("sat");
   const [playing, setPlaying] = useState(false);
   const [command, setCommand] = useState<{ recenter?: boolean; n: number } | undefined>();
@@ -65,7 +67,16 @@ export default function MapScreen() {
 
   return (
     <View style={styles.root} testID="map-screen">
-      <LeafletMap year={year} base={base} reports={reports} command={command} />
+      <LeafletMap
+        year={year}
+        base={base}
+        reports={reports}
+        command={command}
+        padTop={insets.top + 96}
+        padBottom={bottomChrome + 300}
+        onPatch={(id) => setPatch(PATCHES.find((p) => p.id === id) ?? null)}
+      />
+      <PatchSheet patch={patch} onClose={() => setPatch(null)} />
 
       {/* Header */}
       <Animated.View entering={FadeInDown.duration(500)} style={[styles.header, { top: insets.top + 8 }]}>
@@ -113,7 +124,7 @@ export default function MapScreen() {
               <Pressable key={y} testID={`year-${y}-btn`} onPress={() => pick(y)} style={styles.stop} hitSlop={8}>
                 <View style={[styles.dot, active && styles.dotActive]} />
                 <Text style={[styles.stopLabel, active && styles.stopLabelActive]}>
-                  {y === 2024 ? "Hoje" : `${2024 - y} anos`}
+                  {y === CURRENT_YEAR ? "Hoje" : `${CURRENT_YEAR - y} anos`}
                 </Text>
               </Pressable>
             );
@@ -126,6 +137,7 @@ export default function MapScreen() {
           <Legend color={colors.lost} label="Perdido" dashed />
           <Legend color={colors.lost} label="Denúncia" round />
         </View>
+        <Text style={styles.tapHint} testID="map-tap-hint">Toque numa mancha para ver fotos de antes x depois</Text>
 
         <View style={styles.actions}>
           <Pressable testID="play-timeline-btn" style={styles.btnGhost} onPress={() => setPlaying((p) => !p)}>
@@ -217,6 +229,7 @@ const useStyles = makeStyles((c) => ({
   legend: { flexDirection: "row", alignItems: "center", gap: 6 },
   swatch: { width: 12, height: 12, borderRadius: 3, borderWidth: 1 },
   legendText: { fontFamily: fonts.text, fontSize: 11, color: c.onSurfaceSecondary },
+  tapHint: { fontFamily: fonts.text, fontSize: 11, color: c.muted, marginTop: 8, textAlign: "center" },
   actions: { flexDirection: "row", gap: 8, marginTop: 12 },
   btn: {
     flex: 1,

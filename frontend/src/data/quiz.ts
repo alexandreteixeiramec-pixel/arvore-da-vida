@@ -49,7 +49,7 @@ export const QUESTIONS: Question[] = [
     explain: "A pitangueira é nativa da Mata Atlântica, dá frutos e atrai pássaros.",
   },
   {
-    q: "Segundo o modelo do app, quanto da cobertura arbórea a ilha perdeu de 1994 a 2024?",
+    q: "Segundo o modelo do app, quanto da cobertura arbórea a ilha perdeu de 1996 a 2026?",
     options: ["Cerca de 5%", "Cerca de 10%", "Quase metade", "Nada"],
     answer: 2,
     explain: "De ~58% para ~31% de cobertura: uma perda de quase metade em 30 anos (estimativa educativa).",
@@ -59,6 +59,18 @@ export const QUESTIONS: Question[] = [
     options: ["MapBiomas", "Netflix", "Wikipédia", "Spotify"],
     answer: 0,
     explain: "O MapBiomas usa imagens de satélite para mapear a vegetação ano a ano.",
+  },
+  {
+    q: "O que acontece com aves migratórias, como o maçarico, quando o mangue é aterrado?",
+    options: ["Ficam mais numerosas", "Mudam a parada da rota migratória", "Viram aves de gaiola", "Nada muda"],
+    answer: 1,
+    explain: "Sem áreas de alimentação e descanso, elas passam a parar em outros pontos da Baía de Todos os Santos.",
+  },
+  {
+    q: "Por que abelhas e borboletas somem quando as árvores são cortadas?",
+    options: ["Por causa do frio", "Faltam flores e abrigo", "Viram outros insetos", "Por excesso de chuva"],
+    answer: 1,
+    explain: "Sem flores nativas e sombra, os polinizadores perdem alimento e abrigo — e as plantas deixam de ser polinizadas.",
   },
   {
     q: "Qual atitude mais ajuda a reverter a desarborização?",

@@ -14,3 +14,8 @@ Expo SDK 57 (expo-router, tabs: Mapa/Dados/Denunciar/Quiz; stack: comparar, nova
 ## Backlog
 P1: show real historical satellite imagery (Esri Wayback); report detail/delete UI; class leaderboard for the quiz
 P2: PDF export of data for the school presentation; replace the illustrative polygons with MapBiomas-derived data
+## Update (2026-06, iteration 2)
+- Vegetation patches moved inside the real island outline (OSM); map fits/limits to the island
+- Years now 1996/2006/2016/2026 (CURRENT_YEAR=2026)
+- Tap a patch -> sheet with real satellite before (Esri Wayback 2014) x after (2026), loss %, cause, Google Maps link, fauna impact
+- Dados: "Fauna que sumiu" card (birds -42%, insects -53%, migratory route change); quiz now 12 questions

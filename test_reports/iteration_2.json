@@ -1,0 +1,28 @@
+{
+  "summary": "Iteration 2 verified all four user-requested fixes end-to-end on mobile viewport 390x844 at the public URL. Map: default selected-year is 2026 and the four timeline buttons (year-1996/2006/2016/2026-btn) update coverage to 58%/49%/39%/31% with labels '30 anos / 20 anos / 10 anos / Hoje'. The island map now fits Madre de Deus (bounds set on the Leaflet iframe) and vegetation polygons live inside the island. Tapping a polygon (simulated via post({type:'patch',id:'p1'}) inside the iframe) opens the PatchSheet (testID patch-sheet) with patch-sheet-name='Mata do alto da ilha', patch-sheet-loss='77%', satellite before/after crops (patch-photo-before 2014, patch-photo-after 2026), patch-open-google-maps-btn and patch-sheet-close-btn. Antes x Agora: compare-before-label='1996 · 58% verde', compare-now-label='Hoje · 31% verde', tapping a patch on the compare maps also opens the PatchSheet, compare-back-btn returns to the Mapa. Dados tab: new chart-fauna card shows fauna-bird-index='-42%' and fauna-insect-index='-53%' with 6 rows (fauna-row-0..5); the 'rota alterada' badge is present on the migratory row (fauna-row-2); bar chart years include 1996/2006/2016/2026. Quiz: completed 12 questions and quiz-score shows X/12 (observed 2/12). Regressions: Denunciar list visible, logout returns to the login screen with Google button. No red-screen, no console errors beyond a benign RN web warning about props.pointerEvents being deprecated (safe to ignore). All features in review_request verified PASS.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "PatchSheet SatCrop overlay", "issue": "React Native Web warns: 'props.pointerEvents is deprecated. Use style.pointerEvents'. Harmless but worth migrating. Reference: /app/frontend/src/components/PatchSheet.tsx:44 (pointerEvents=\"none\" prop on the dashed-circle overlay View)."}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Optional: move pointerEvents=\"none\" from prop to style ({ pointerEvents: 'none' }) on the overlay View in PatchSheet.tsx to silence the RN Web deprecation warning."
+  ],
+  "critical_code_review_comments": [
+    "LeafletMap.web memoises buildMapHtml with an empty dep array (eslint disabled) — intentional so iframe srcDoc isn't recreated. State changes are then pushed via postMessage. Good pattern; just make sure new props (padTop/padBottom) stay stable on mount.",
+    "PatchSheet uses faunaGroups = FAUNA.slice(0,4) for non-mangrove patches, so the 'Aves migratórias' row (migratory=true) is only shown on mangrove-type patches. If the intention is to always surface the altered migratory route on vegetation patches, consider ensuring the migratory row is included for 'mata'/'restinga' too.",
+    "SatCrop uses the Esri Wayback endpoint with a hard-coded release '10' (default028mm/MapServer/tile/10/{z}/{y}/{x}). Wayback release ids are opaque and can expire; verify the 2014 tiles still load long-term."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not run this iteration (frontend-only request)", "frontend": "100% (18/18 checks passed)"},
+  "seed_data_creation": "Re-seeded user_sessions {session_token:'test_session_madre_123', user_id:'user_test0001', email:'teste@madre.app', name:'Aluno Teste'} in test_database after the logout step so subsequent agents can authenticate.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend base URL in frontend/.env is EXPO_PUBLIC_BACKEND_URL=https://arvore-da-vida-1.preview.emergentagent.com. To authenticate the web UI set localStorage.session_token to the JSON string '\"test_session_madre_123\"' and reload. The Leaflet map is embedded in an iframe (title='mapa'); clicking SVG polygons via Playwright can be intercepted — simulate a tap by running inside the frame: parent.postMessage(JSON.stringify({type:'patch', id:'p1'}),'*'). On the Antes x Agora screen there are two map iframes; patch messages from either open the shared PatchSheet. Quiz has 12 questions; use quiz-option-N + quiz-next-btn and the final quiz-score is X/12. Logout removes the session from Mongo, so re-seed as shown in iteration_1/2 before further runs.",
+  "rca_of_issue": "N/A — all four user-reported bugs (vegetation inside sea, year 2024, no before/after on tap, missing bird/insect percentages) are fixed and verified."
+}

@@ -7,7 +7,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Circle, Polyline, Line } from "react-native-svg";
 
-import { SOURCES, STATS, TIPS } from "@/src/data/vegetation";
+import { CURRENT_YEAR, FAUNA, SOURCES, STATS, TIPS } from "@/src/data/vegetation";
 import { usesNativeTabs } from "@/src/navigation";
 import { fonts, makeStyles, useTheme } from "@/src/theme";
 
@@ -55,7 +55,7 @@ export default function DataScreen() {
                 <View
                   style={[
                     styles.barFill,
-                    { height: `${s.coverage}%`, backgroundColor: s.year === 2024 ? colors.error : colors.brandPrimary },
+                    { height: `${s.coverage}%`, backgroundColor: s.year === CURRENT_YEAR ? colors.error : colors.brandPrimary },
                   ]}
                 />
               </View>
@@ -86,6 +86,41 @@ export default function DataScreen() {
           </View>
         ))}
         <Text style={styles.cardNote}>População cresceu de ~{first.population / 1000} mil para ~{last.population / 1000} mil habitantes.</Text>
+      </Card>
+
+      <Card title="Fauna que sumiu da ilha" delay={350} testID="chart-fauna">
+        <View style={styles.faunaIdx}>
+          <View style={styles.faunaIdxBox} testID="fauna-bird-index">
+            <Text style={styles.faunaIdxNum}>-{100 - last.birdIndex}%</Text>
+            <Text style={styles.faunaIdxLabel}>espécies de aves avistadas</Text>
+          </View>
+          <View style={styles.faunaIdxBox} testID="fauna-insect-index">
+            <Text style={styles.faunaIdxNum}>-{100 - last.insectIndex}%</Text>
+            <Text style={styles.faunaIdxLabel}>insetos polinizadores</Text>
+          </View>
+        </View>
+        {FAUNA.map((f, i) => (
+          <View key={f.group} style={styles.faunaRow} testID={`fauna-row-${i}`}>
+            <View style={styles.faunaHead}>
+              <Feather name={f.icon as any} size={14} color={colors.brandPrimary} />
+              <Text style={styles.faunaName}>{f.group}</Text>
+              {f.migratory && (
+                <View style={styles.migBadge}>
+                  <Text style={styles.migText}>rota alterada</Text>
+                </View>
+              )}
+              <Text style={styles.faunaPct}>-{f.lost}%</Text>
+            </View>
+            <View style={styles.faunaTrack}>
+              <View style={[styles.faunaFill, { width: `${f.lost}%` }]} />
+            </View>
+            <Text style={styles.faunaEx}>{f.examples} · {f.effect}</Text>
+          </View>
+        ))}
+        <Text style={styles.cardNote}>
+          Estimativa educativa ({first.year}–{last.year}) baseada em estudos sobre fragmentação de matas e manguezais
+          urbanos. Para registros reais de aves da região, consulte o WikiAves.
+        </Text>
       </Card>
 
       <Text style={styles.section}>Como agir</Text>
@@ -234,6 +269,19 @@ const useStyles = makeStyles((c) => ({
   treeIcons: { flex: 1, flexDirection: "row", gap: 2, flexWrap: "wrap" },
   treeVal: { fontFamily: fonts.display, fontSize: 15, color: c.onSurface },
   section: { fontFamily: fonts.display, fontSize: 22, color: c.onSurface, marginTop: 32, marginBottom: 8, paddingHorizontal: 16 },
+  faunaIdx: { flexDirection: "row", gap: 8, marginBottom: 8 },
+  faunaIdxBox: { flex: 1, backgroundColor: c.brandTertiary, borderRadius: 12, padding: 12 },
+  faunaIdxNum: { fontFamily: fonts.display, fontSize: 24, color: c.error },
+  faunaIdxLabel: { fontFamily: fonts.text, fontSize: 12, color: c.onBrandTertiary },
+  faunaRow: { paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: c.divider },
+  faunaHead: { flexDirection: "row", alignItems: "center", gap: 6 },
+  faunaName: { fontFamily: fonts.text, fontSize: 14, color: c.onSurface, flex: 1 },
+  faunaPct: { fontFamily: fonts.display, fontSize: 16, color: c.error },
+  migBadge: { backgroundColor: c.warning, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 2 },
+  migText: { fontFamily: fonts.text, fontSize: 10, color: c.onWarning },
+  faunaTrack: { height: 6, borderRadius: 3, backgroundColor: c.surfaceTertiary, marginTop: 6, overflow: "hidden" },
+  faunaFill: { height: 6, backgroundColor: c.error },
+  faunaEx: { fontFamily: fonts.text, fontSize: 11, color: c.muted, marginTop: 4 },
   tip: {
     flexDirection: "row",
     gap: 12,
