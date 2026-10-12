@@ -1,0 +1,131 @@
+{
+  "app_name": "Madre: Árvore da Vida",
+  "personality": "8 Hand-Drawn / Journal LIGHT",
+  "personality_one_liner": "An earthy, reflective, and human-made experience focused on environmental awareness and action.",
+  "color": {
+    "surface": "#F5F2EB",
+    "onSurface": "#2C2F29",
+    "surfaceSecondary": "#FFFFFF",
+    "onSurfaceSecondary": "#2C2F29",
+    "surfaceTertiary": "#EAE5D9",
+    "onSurfaceTertiary": "#4A5D45",
+    "surfaceInverse": "#2C2F29",
+    "onSurfaceInverse": "#F5F2EB",
+    "brand": "#4A5D45",
+    "brandPrimary": "#4A5D45",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#798E70",
+    "onBrandSecondary": "#FFFFFF",
+    "brandTertiary": "#DCE3D6",
+    "onBrandTertiary": "#2C2F29",
+    "success": "#798E70",
+    "onSuccess": "#FFFFFF",
+    "warning": "#D19C4C",
+    "onWarning": "#2C2F29",
+    "error": "#A86552",
+    "onError": "#FFFFFF",
+    "info": "#6E8994",
+    "onInfo": "#FFFFFF",
+    "border": "#D5D0C5",
+    "borderStrong": "#A6A196",
+    "divider": "#E8E4DB",
+    "muted": "#75746E",
+    "onBrand": "#FFFFFF"
+  },
+  "typography": {
+    "displayFontFamily": "Fraunces",
+    "textFontFamily": "Nunito",
+    "scale": { "sm": 12, "base": 14, "lg": 16, "xl": 20, "2xl": 24 }
+  },
+  "spacing": { 
+    "rule": "Maintain generous, calming whitespace. Avoid dense clustering. Use soft vertical rhythm similar to a scrapbook or journal.", 
+    "xs": 4, "sm": 8, "md": 12, "lg": 16, "xl": 24, "2xl": 32, "3xl": 48 
+  },
+  "radius_tokens": { "sm": 6, "md": 12, "lg": 20, "pill": 999 },
+  "shadow_tier": "0",
+  "navigation": "bottom_tabs",
+  "icon_set": "Feather",
+  "glassmorphism": {
+    "enabled": "false",
+    "do's": [],
+    "dont's": ["Do not use blur or glass effects in this personality as it clashes with the organic, matte paper aesthetic."]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    { 
+      "name": "Mapa (Home)", 
+      "purpose": "Interactive map showing the vegetation evolution of Madre de Deus over decades.", 
+      "states": { 
+        "loading": "A soft pulsing map placeholder.", 
+        "empty": "No map data available. Check connection.", 
+        "error": "Failed to load map data. Retry button." 
+      },
+      "layout": "Full-screen map using a WebView with Leaflet. Overlay a custom timeline slider positioned at the bottom (floating above the map, with tap-to-jump markers for 1994, 2004, 2014, 2024). Use large touch targets for the slider handles. Place a floating action button (FAB) in brandSecondary for quick current-location or layer-toggle."
+    },
+    { 
+      "name": "Dados", 
+      "purpose": "Displays charts and data about deforestation and air quality.", 
+      "states": { 
+        "loading": "Skeleton loading for charts.", 
+        "empty": "No data collected yet.", 
+        "error": "Failed to load data." 
+      },
+      "layout": "Scrapbook-style vertical scroll. Soft, imperfectly stacked cards (surfaceSecondary) containing charts (using Victory or simple SVG). Generous padding (xl to 2xl). Add a hero banner at the top using the aerial forest image with a gradient-to-dark scrim. Include an 'Action Tips' section at the bottom."
+    },
+    { 
+      "name": "Denunciar", 
+      "purpose": "Citizen reporting tool for deforestation points, capturing GPS and photos.", 
+      "states": { 
+        "loading": "Saving report...", 
+        "empty": "Shows an illustration/image of cut logs with a 'Reportar desmatamento' primary CTA centered.", 
+        "error": "Failed to submit report. Please try again." 
+      },
+      "layout": "Empty state by default, displaying a textured list of past reports if any. When adding a report, show a single-column form: 'Photo capture' large target, 'Location' auto-filled text, 'Description' multiline input. Submit button sticky at the bottom."
+    },
+    { 
+      "name": "Quiz", 
+      "purpose": "Educational interactive quiz about local environment.", 
+      "states": { 
+        "loading": "Loading questions...", 
+        "empty": "No quiz available today.", 
+        "error": "Could not load quiz." 
+      },
+      "layout": "Paging cards (one question per view). Questions presented in large elegant display serif (Fraunces). Answers are pill-shaped outline buttons (border color). Include a progress indicator at the top. Use subtle animations for right/wrong feedback (success/error tokens)."
+    }
+  ],
+  "images": {
+    "hero_forest": {
+      "url": "https://images.unsplash.com/photo-1503435980610-a51f3ddfee50?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNTl8MHwxfHNlYXJjaHwxfHxsdXNoJTIwZ3JlZW4lMjB0cmVlcyUyMG5hdHVyZXxlbnwwfHx8fDE3OTE4MDcwNTd8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Aerial photography of lush green forest"
+    },
+    "empty_deforestation": {
+      "url": "https://images.unsplash.com/photo-1557600287-790c8422bcc2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzN8MHwxfHNlYXJjaHwyfHxkZWZvcmVzdGF0aW9uJTIwY3V0JTIwdHJlZXN8ZW58MHx8fHwxNzkxODA3MDU4fDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Pile of cut wood logs in a forest"
+    },
+    "bahia_nature": {
+      "url": "https://images.unsplash.com/photo-1549933296-ed6659d96c11?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzOTB8MHwxfHNlYXJjaHwxfHxicmF6aWwlMjBiYWhpYSUyMG5hdHVyZXxlbnwwfHx8fDE3OTE4MDcwNTd8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Blue sea and sky in Bahia"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Design 'Madre: Árvore da Vida', an educational civic app for tracking deforestation in Madre de Deus.",
+    "Follow the '8 Hand-Drawn / Journal LIGHT' personality strictly. Use the provided earthy palette (moss, sage, clay, warm off-white). DO NOT use blues, purples, or indigo.",
+    "Typography must be Fraunces for display/headings and Nunito for body. Do not exceed font weight 500.",
+    "For the Map screen, implement a WebView rendering a Leaflet map. Add an overlay bottom slider (native RN component) with distinct decade markers (1994, 2004, 2014, 2024) acting as a time-machine controller.",
+    "No glassmorphism or blur effects should be used. Rely on flat, matte, and organic design elements.",
+    "For the 'Denunciar' screen, implement a sticky primary CTA at the bottom above the tab bar for 'Reportar desmatamento'. Ensure safe area paddings are respected.",
+    "Apply gradient-to-dark scrims (transparent -> 20% surfaceInverse -> 70% surfaceInverse) to all background images that have text overlaid, especially the hero_forest image.",
+    "Ensure the Quiz screen has a calming progression with soft colors and clear feedback."
+  ]
+}

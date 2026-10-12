@@ -1,0 +1,69 @@
+{
+  "expo": {
+    "name": "Madre: Árvore da Vida",
+    "slug": "frontend",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "frontend",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.emergent.arvoredavida.groi25",
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Fotografe desmatamentos para denunciar no mapa",
+        "NSPhotoLibraryUsageDescription": "Anexe fotos da galeria às suas denúncias",
+        "NSLocationWhenInUseUsageDescription": "Marque o local exato da denúncia no mapa"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.emergent.arvoredavida.groi25",
+      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-image.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#000000"
+        }
+      ],
+      "expo-font",
+      "expo-image",
+      "expo-secure-store",
+      "expo-web-browser",
+      "expo-status-bar",
+      "expo-apple-authentication",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Fotografe desmatamentos para denunciar no mapa",
+          "photosPermission": "Anexe fotos da galeria às suas denúncias"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Marque o local exato da denúncia no mapa"
+        }
+      ],
+      "@react-native-vector-icons/feather"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

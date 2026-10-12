@@ -1,0 +1,24 @@
+{
+  "summary": "First test iteration for Madre: Árvore da Vida. Backend pytest suite (9 tests) covering auth (/api/auth/me with and without token, invalid /auth/session, invalid /auth/apple), upload+download roundtrip, reports CRUD with ownership and auth, and logout+reseed. All 9 backend tests PASS (100%). Frontend tested end-to-end on mobile viewport 390x844: login screen with Google button (Apple hidden on web as expected), localStorage session-token login, Mapa tab year buttons (1994/2004/2014/2024 update selected-year 58%/49%/39%/31%), play-timeline, Antes x Agora compare screen with 2 maps + compare-back-btn, Dados tab (KPIs, charts, tips, source links), Denunciar tab (list, new-report-btn opens form, category chips, description input, submit without photo/location works and new report appears in list), Quiz full run (10 questions via quiz-option-N + quiz-next-btn, quiz-score + quiz-restart-btn), and logout-btn returns to login. All testIDs present and functional. No red-screen, no 5xx. No deprecated expo packages found (no expo-av/expo-barcode-scanner/expo-background-fetch).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py uses deprecated @app.on_event('startup'|'shutdown') (FastAPI recommends lifespan context managers). Works today but is deprecated.",
+    "In create_report (server.py:270-278), the Report model's created_at is set via default_factory based on when Pydantic instantiates - acceptable here but could be made explicit to avoid test-env surprises.",
+    "list_reports returns all reports from all users without pagination (to_list(500)). Fine for school project scope; add pagination if volume grows."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100% (9/9)", "frontend": "100% (all requested flows verified)"},
+  "seed_data_creation": "Re-seeded user_sessions document {session_token: 'test_session_madre_123', user_id: 'user_test0001'} in test_database after logout tests and after UI logout, so subsequent runs have a valid Bearer token.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend base URL is read from frontend/.env (EXPO_PUBLIC_BACKEND_URL=https://arvore-da-vida-1.preview.emergentagent.com). Pytest config at /app/backend/pytest.ini forces xdist loadscope which can break order-dependent tests (e.g., logout before reports); run with -o addopts='' to disable xdist and keep sequential order. Seeded user: user_test0001 (teste@madre.app). To authenticate the web UI, set localStorage key 'session_token' to the JSON string '\"test_session_madre_123\"' and reload. Apple button is intentionally not rendered on web (Platform.OS !== 'ios'). Quiz uses explicit quiz-next-btn (not auto-advance). Compare screen testIDs: compare-back-btn. All interactive elements have testID.",
+  "rca_of_issue": "N/A - no bugs found."
+}
